@@ -5,10 +5,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.vit.myweatherapp.BuildConfig;
+import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.logger.CrashReportingTree;
 
 import butterknife.ButterKnife;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -50,6 +52,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             Timber.plant(new CrashReportingTree());
         }
+    }
+
+    private void initFont() {
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/Roboto-Light.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
     }
 
 }
