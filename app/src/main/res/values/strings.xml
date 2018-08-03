@@ -3,4 +3,7 @@
 
     <!--Main screen-->
     <string name="error_connect">Lỗi kết nối: </string>
+    <string name="message_title_search">Weather of City:</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_ok">OK</string>
 </resources>
