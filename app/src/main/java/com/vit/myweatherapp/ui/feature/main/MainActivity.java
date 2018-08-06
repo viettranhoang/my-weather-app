@@ -1,4 +1,4 @@
-package com.vit.myweatherapp.ui.feature;
+package com.vit.myweatherapp.ui.feature.main;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -7,9 +7,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,13 +31,13 @@ import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.DailyWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 import com.vit.myweatherapp.data.remote.WeatherService;
+import com.vit.myweatherapp.ui.adapter.ViewPagerAdapter;
 import com.vit.myweatherapp.ui.base.BaseActivity;
 import com.vit.myweatherapp.ui.AppConfig;
 import com.vit.myweatherapp.ui.util.Utils;
 import com.vit.myweatherapp.ui.widget.DailyView;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +64,15 @@ public class MainActivity extends BaseActivity implements
     // ---------------------------------------------------------------------------------------------
     // BIND VIEWS
     // ---------------------------------------------------------------------------------------------
+
+    @BindView(R.id.toolbar_main)
+    Toolbar toolbar;
+
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+
+    @BindView(R.id.layout_tab)
+    TabLayout layoutTab;
 
     @BindView(R.id.text_city)
     TextView textCity;
@@ -178,9 +188,12 @@ public class MainActivity extends BaseActivity implements
      * setup actionbar
      */
     private void setupActionBar() {
-        Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Hello");
+
+        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(mViewPagerAdapter);
+        layoutTab.setupWithViewPager(viewPager);
 
     }
 
