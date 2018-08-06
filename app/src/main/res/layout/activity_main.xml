@@ -5,19 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:fitsSystemWindows="true"
     tools:context=".ui.feature.MainActivity">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_search"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_search"
-        android:layout_margin="10dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+    <include layout="@layout/toolbar" android:id="@+id/toolbar_main"/>
 
     <LinearLayout
         android:orientation="vertical"
         android:weightSum="10"
+        android:layout_below="@id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

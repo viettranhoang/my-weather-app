@@ -10,7 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -54,13 +57,12 @@ public class MainActivity extends BaseActivity implements
 
     private WeatherService mWeatherService;
 
+    private DailyWeatherResponse mDailyWeather;
+
 
     // ---------------------------------------------------------------------------------------------
     // BIND VIEWS
     // ---------------------------------------------------------------------------------------------
-
-    @BindView(R.id.button_search)
-    FloatingActionButton buttonSearch;
 
     @BindView(R.id.text_city)
     TextView textCity;
@@ -100,6 +102,7 @@ public class MainActivity extends BaseActivity implements
         super.initView();
 
         try {
+            setupActionBar();
             initGoogleApi();
 
             mWeatherService = ApiUtils.getWeatherService();
@@ -136,15 +139,50 @@ public class MainActivity extends BaseActivity implements
         Toast.makeText(this, R.string.error_connect + connectionResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
     }
 
-    @OnClick(R.id.button_search)
-    void onClickSearch() {
-        showSearchDialog();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        switch (item.getItemId())
+        {
+            case R.id.menu_refresh:
+                getCurrentLocation();
+                break;
+            case R.id.menu_search:
+                showSearchDialog();
+                break;
+            case R.id.menu_exit:
+                Toast.makeText(this, "Exit", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 
 
     // ---------------------------------------------------------------------------------------------
     // PRIVATE METHODS
     // ---------------------------------------------------------------------------------------------
+
+    /**
+     * setup actionbar
+     */
+    private void setupActionBar() {
+        Toolbar toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Hello");
+
+    }
 
     /**
      * get current weather from api
@@ -328,4 +366,6 @@ public class MainActivity extends BaseActivity implements
             Timber.e(e);
         }
     }
+
+
 }
