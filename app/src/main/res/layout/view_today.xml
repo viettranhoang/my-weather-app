@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="256dp"
     android:weightSum="2"
@@ -19,11 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="40sp"
-            android:text="25.4`C" />
+            tools:text="25.4`C" />
 
         <TextView
             android:id="@+id/text_weather_today"
-            android:text="Few clouds"
+            tools:text="Few clouds"
+            android:textSize="18sp"
             android:layout_weight="4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -44,12 +46,13 @@
 
         <TextView
             android:id="@+id/text_last_update"
+            android:textSize="18sp"
             android:layout_alignParentBottom="true"
             android:padding="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right|fill_vertical"
-            android:text="Last update:" />
+            tools:text="Last update:" />
 
 
     </RelativeLayout>

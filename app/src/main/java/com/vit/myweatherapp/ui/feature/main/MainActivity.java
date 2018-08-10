@@ -17,8 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -34,12 +32,7 @@ import com.vit.myweatherapp.data.remote.WeatherService;
 import com.vit.myweatherapp.ui.adapter.ViewPagerAdapter;
 import com.vit.myweatherapp.ui.base.BaseActivity;
 import com.vit.myweatherapp.ui.AppConfig;
-import com.vit.myweatherapp.ui.util.Utils;
-import com.vit.myweatherapp.ui.widget.DailyView;
 import com.vit.myweatherapp.ui.widget.TodayView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.BindView;
 import retrofit2.Call;
