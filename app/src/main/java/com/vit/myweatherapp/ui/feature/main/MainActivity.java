@@ -36,6 +36,10 @@ import com.vit.myweatherapp.ui.base.BaseActivity;
 import com.vit.myweatherapp.ui.AppConfig;
 import com.vit.myweatherapp.ui.util.Utils;
 import com.vit.myweatherapp.ui.widget.DailyView;
+import com.vit.myweatherapp.ui.widget.TodayView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import retrofit2.Call;
@@ -74,29 +78,9 @@ public class MainActivity extends BaseActivity implements
     @BindView(R.id.layout_tab)
     TabLayout layoutTab;
 
-    @BindView(R.id.text_city)
-    TextView textCity;
+    @BindView(R.id.view_today)
+    TodayView viewToday;
 
-    @BindView(R.id.text_time)
-    TextView textTime;
-
-    @BindView(R.id.text_today_main)
-    TextView textTodayMain;
-
-    @BindView(R.id.text_today_temp)
-    TextView textTodayTemp;
-
-    @BindView(R.id.image_today)
-    ImageView imageToday;
-
-    @BindView(R.id.view_daily_one)
-    DailyView viewDailyOne;
-
-    @BindView(R.id.view_daily_two)
-    DailyView viewDailytwo;
-
-    @BindView(R.id.view_daily_three)
-    DailyView viewDailythree;
 
     // ---------------------------------------------------------------------------------------------
     // OVERIDE METHODS
@@ -166,6 +150,7 @@ public class MainActivity extends BaseActivity implements
         {
             case R.id.menu_refresh:
                 getCurrentLocation();
+                viewToday.setLastUpdate();
                 break;
             case R.id.menu_search:
                 showSearchDialog();
@@ -184,17 +169,19 @@ public class MainActivity extends BaseActivity implements
     // PRIVATE METHODS
     // ---------------------------------------------------------------------------------------------
 
-    /**
-     * setup actionbar
-     */
+
     private void setupActionBar() {
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Hello");
+        getSupportActionBar().setTitle("My Weather App");
 
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mViewPagerAdapter);
         layoutTab.setupWithViewPager(viewPager);
 
+    }
+
+    private void setTitleActionBar(CurrentWeatherResponse c) {
+        getSupportActionBar().setTitle(c.getName());
     }
 
     /**
@@ -210,7 +197,8 @@ public class MainActivity extends BaseActivity implements
                         public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
                             if (response.isSuccessful()) {
                                 Timber.i("CurrentWeather: " + response.body().getName());
-                                setInfoView(response.body());
+                                viewToday.setDataForView(getApplicationContext(), response.body());
+                                setTitleActionBar(response.body());
                             }
                         }
 
@@ -226,7 +214,6 @@ public class MainActivity extends BaseActivity implements
                         public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
                             if (response.isSuccessful()) {
                                 Timber.i("DailyWeather: " + response.body().getCity().getName());
-                                setInfoDaily(response.body());
                             }
                         }
 
@@ -257,9 +244,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    /**
-     * get current location
-     */
     private void getCurrentLocation() {
         try {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -283,39 +267,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-
-    private void setInfoDaily(DailyWeatherResponse d) {
-        setDailyView(d, viewDailyOne, 0);
-        setDailyView(d, viewDailytwo, 1);
-        setDailyView(d, viewDailythree, 2);
-    }
-
-    private void setDailyView(DailyWeatherResponse d, DailyView dailyView, int idDay) {
-        dailyView.setView("Day +" + (idDay + 1),
-                d.getList().get(idDay).getWeather().get(0).getIcon(),
-                Utils.getTempMinMax(d.getList().get(idDay).getTemp().getMin(), d.getList().get(idDay).getTemp().getMax()));
-    }
-
-    /**
-     * set info for views
-     *
-     * @param c obiect response
-     */
-    private void setInfoView(CurrentWeatherResponse c) {
-        try {
-            textCity.setText(c.getName());
-            textTime.setText(Utils.getDate(c.getDt()));
-            textTodayMain.setText("Today: " + c.getWeather().get(0).getMain());
-            textTodayTemp.setText(Utils.getTempMinMax(c.getMain().getTempMin(), c.getMain().getTempMax()));
-            Utils.getImageUrl(this, imageToday, c.getWeather().get(0).getIcon());
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    /**
-     * show search dialog
-     */
     private void showSearchDialog() {
         try {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -354,7 +305,8 @@ public class MainActivity extends BaseActivity implements
                     .enqueue(new Callback<CurrentWeatherResponse>() {
                         @Override
                         public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
-                            setInfoView(response.body());
+                            viewToday.setDataForView(getApplicationContext(), response.body());
+                            setTitleActionBar(response.body());
                         }
 
                         @Override
@@ -367,7 +319,6 @@ public class MainActivity extends BaseActivity implements
                     .enqueue(new Callback<DailyWeatherResponse>() {
                         @Override
                         public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
-                            setInfoDaily(response.body());
                         }
 
                         @Override

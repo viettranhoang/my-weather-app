@@ -5,12 +5,29 @@
     android:weightSum="2"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/text_weather_today"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:weightSum="5"
         android:layout_weight="1"
-        android:text="25.4`C" />
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_temp_today"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:text="25.4`C" />
+
+        <TextView
+            android:id="@+id/text_weather_today"
+            android:text="Few clouds"
+            android:layout_weight="4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,10 +36,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/image_today"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"/>
+            android:id="@+id/image_weather_today"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="30dp"
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:id="@+id/text_last_update"

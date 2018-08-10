@@ -6,4 +6,13 @@
     <string name="message_title_search">Weather of City:</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
+    
+    <string name="celcius">℃</string>
+    <string name="pressure">Pressure: </string>
+    <string name="humidity">Humidity: </string>
+    <string name="wind">Wind: </string>
+    <string name="sunride">Sunride: </string>
+    <string name="sunset">Sunset: </string>
+    <string name="current_weather">%1$s\nWind: %2$.2f m/s\nPressure: %3$.2f hPa\nHumidity: %4$d %%\nSunride: %5$s\nSunset: %6$s</string>
+    <string name="last_update">Last update:\n%1$s</string>
 </resources>

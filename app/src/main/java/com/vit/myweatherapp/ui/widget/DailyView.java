@@ -28,15 +28,6 @@ public class DailyView extends LinearLayout{
     // BIND VIES
     // ---------------------------------------------------------------------------------------------
 
-    @BindView(R.id.text_day_title)
-    TextView textDayTitle;
-
-    @BindView(R.id.image_day)
-    ImageView imageDay;
-
-    @BindView(R.id.text_day_temp)
-    TextView textDayTemp;
-
     // ---------------------------------------------------------------------------------------------
     // PUBLIC METHODS
     // ---------------------------------------------------------------------------------------------
@@ -56,10 +47,8 @@ public class DailyView extends LinearLayout{
         initialize();
     }
 
-    public void setView(String mTitleDay, String mImageDay, String mTempDay) {
-        textDayTitle.setText(mTitleDay);
-        textDayTemp.setText(mTempDay);
-        Utils.getImageUrl(getContext(), imageDay, mImageDay);
+    public void setView() {
+
     }
 
 

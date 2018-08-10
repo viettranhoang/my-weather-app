@@ -13,8 +13,6 @@
         android:theme="@style/AppTheme.AppBarOverlay"
         app:toolbarId="@+id/toolbar">
 
-
-
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,6 +22,7 @@
             app:titleEnabled="false">
 
             <com.vit.myweatherapp.ui.widget.TodayView
+                android:id="@+id/view_today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="?attr/actionBarSize"
@@ -40,8 +39,6 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
-
-
         <android.support.design.widget.TabLayout
             android:id="@+id/layout_tab"
             android:layout_width="match_parent"
@@ -57,96 +54,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="invisible"
-        android:weightSum="10">
-
-        <TextView
-            android:id="@+id/text_city"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="Weather" />
-
-        <TextView
-            android:id="@+id/text_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="8/16/2016 7:16 AM" />
-
-        <LinearLayout
-            android:id="@+id/layout_today"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_city"
-            android:layout_weight="8"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/image_today"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/text_today_main"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Today : Clear"
-                    android:textSize="27sp" />
-
-                <TextView
-                    android:id="@+id/text_today_temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="16`C - 32`C"
-                    android:textSize="27sp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_daily"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="2"
-            android:gravity="center_horizontal|bottom"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <com.vit.myweatherapp.ui.widget.DailyView
-                android:id="@+id/view_daily_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <com.vit.myweatherapp.ui.widget.DailyView
-                android:id="@+id/view_daily_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <com.vit.myweatherapp.ui.widget.DailyView
-                android:id="@+id/view_daily_three"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>
