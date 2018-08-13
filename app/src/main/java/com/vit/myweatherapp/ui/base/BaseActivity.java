@@ -22,6 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         bindViews();
         initTimber();
         initView();
+        initFont();
     }
 
     /**

@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">My Weather App</string>
+    <string name="google_maps_key">AIzaSyAdqU_ayvuvcb6Mn6H2QIEPf0SHesnWK8o</string>
+
+    <!--menu-->
+    <string name="menu_map">Map</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_exit">Exit</string>
 
     <!--Main screen-->
     <string name="error_connect">Lỗi kết nối: </string>

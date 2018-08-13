@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -44,6 +46,23 @@ public class MainActivity extends BaseActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    // ---------------------------------------------------------------------------------------------
+    // BIND VIEWS
+    // ---------------------------------------------------------------------------------------------
+
+    @BindView(R.id.toolbar_main)
+    Toolbar mToolbar;
+
+    @BindView(R.id.view_pager)
+    ViewPager mViewPager;
+
+    @BindView(R.id.layout_tab)
+    TabLayout mLayoutTab;
+
+    @BindView(R.id.view_today)
+    TodayView mViewToday;
+
+
 
     // ---------------------------------------------------------------------------------------------
     // FIELDS
@@ -55,24 +74,7 @@ public class MainActivity extends BaseActivity implements
 
     private WeatherService mWeatherService;
 
-    private DailyWeatherResponse mDailyWeather;
-
-
-    // ---------------------------------------------------------------------------------------------
-    // BIND VIEWS
-    // ---------------------------------------------------------------------------------------------
-
-    @BindView(R.id.toolbar_main)
-    Toolbar toolbar;
-
-    @BindView(R.id.view_pager)
-    ViewPager viewPager;
-
-    @BindView(R.id.layout_tab)
-    TabLayout layoutTab;
-
-    @BindView(R.id.view_today)
-    TodayView viewToday;
+    private FragmentManager mFragmentManager;
 
 
     // ---------------------------------------------------------------------------------------------
@@ -92,6 +94,7 @@ public class MainActivity extends BaseActivity implements
             setupActionBar();
             initGoogleApi();
 
+            mFragmentManager = getSupportFragmentManager();
             mWeatherService = ApiUtils.getWeatherService();
         } catch (Exception e) {
             Timber.e(e);
@@ -139,14 +142,16 @@ public class MainActivity extends BaseActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.menu_refresh:
                 getCurrentLocation();
-                viewToday.setLastUpdate();
+                mViewToday.setLastUpdate();
                 break;
             case R.id.menu_search:
                 showSearchDialog();
+                break;
+            case R.id.menu_map:
+                addFragmentMap();
                 break;
             case R.id.menu_exit:
                 Toast.makeText(this, "Exit", Toast.LENGTH_SHORT).show();
@@ -164,12 +169,12 @@ public class MainActivity extends BaseActivity implements
 
 
     private void setupActionBar() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("My Weather App");
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(getString(R.string.app_name));
 
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
-        viewPager.setAdapter(mViewPagerAdapter);
-        layoutTab.setupWithViewPager(viewPager);
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mLayoutTab.setupWithViewPager(mViewPager);
 
     }
 
@@ -183,41 +188,37 @@ public class MainActivity extends BaseActivity implements
      * @param location current position
      */
     private void getCurrentWeatherFromApi(Location location) {
-        try {
-            mWeatherService.getCurrentWeatherResponse(location.getLatitude(), location.getLongitude(), AppConfig.API_KEY)
-                    .enqueue(new Callback<CurrentWeatherResponse>() {
-                        @Override
-                        public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
-                            if (response.isSuccessful()) {
-                                Timber.i("CurrentWeather: " + response.body().getName());
-                                viewToday.setDataForView(getApplicationContext(), response.body());
-                                setTitleActionBar(response.body());
-                            }
+        mWeatherService.getCurrentWeatherResponse(location.getLatitude(), location.getLongitude(), AppConfig.API_KEY)
+                .enqueue(new Callback<CurrentWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
+                        if (response.isSuccessful()) {
+                            Timber.i("CurrentWeather: " + response.body().getName());
+                            mViewToday.setDataForView(getApplicationContext(), response.body());
+                            setTitleActionBar(response.body());
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
 
+                    }
+                });
+
+        mWeatherService.getDailyWeatherRespone(location.getLatitude(), location.getLongitude(), 4, AppConfig.API_KEY)
+                .enqueue(new Callback<DailyWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
+                        if (response.isSuccessful()) {
+                            Timber.i("DailyWeather: " + response.body().getCity().getName());
                         }
-                    });
+                    }
 
-            mWeatherService.getDailyWeatherRespone(location.getLatitude(), location.getLongitude(), 4, AppConfig.API_KEY)
-                    .enqueue(new Callback<DailyWeatherResponse>() {
-                        @Override
-                        public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
-                            if (response.isSuccessful()) {
-                                Timber.i("DailyWeather: " + response.body().getCity().getName());
-                            }
-                        }
+                    @Override
+                    public void onFailure(Call<DailyWeatherResponse> call, Throwable t) {
 
-                        @Override
-                        public void onFailure(Call<DailyWeatherResponse> call, Throwable t) {
-
-                        }
-                    });
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+                    }
+                });
     }
 
     /**
@@ -298,7 +299,7 @@ public class MainActivity extends BaseActivity implements
                     .enqueue(new Callback<CurrentWeatherResponse>() {
                         @Override
                         public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
-                            viewToday.setDataForView(getApplicationContext(), response.body());
+                            mViewToday.setDataForView(getApplicationContext(), response.body());
                             setTitleActionBar(response.body());
                         }
 
@@ -324,5 +325,19 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
+    private void addFragmentMap() {
+        mFragmentManager.popBackStackImmediate();
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        ft.add(R.id.layout_fragment, new MapFragment());
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mFragmentManager.popBackStack();
+    }
 }

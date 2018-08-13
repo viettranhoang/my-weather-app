@@ -5,19 +5,25 @@
     <item
         android:id="@+id/menu_refresh"
         android:icon="@drawable/ic_refresh"
-        app:showAsAction="ifRoom"
-        android:title="Refresh" />
+        app:showAsAction="always"
+        android:title="@string/menu_refresh" />
 
     <item
         android:id="@+id/menu_search"
         android:icon="@drawable/ic_search"
         app:showAsAction="always"
-        android:title="Search" />
+        android:title="@string/menu_search" />
+
+    <item
+        android:id="@+id/menu_map"
+        android:icon="@drawable/ic_map"
+        app:showAsAction="always"
+        android:title="@string/menu_map"/>
 
     <item
         android:id="@+id/menu_exit"
         android:checkable="false"
         app:showAsAction="collapseActionView"
-        android:title="Exit" />
+        android:title="@string/menu_exit" />
 
 </menu>

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vit.myweatherapp.R;
-import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 import com.vit.myweatherapp.data.remote.WeatherService;
@@ -24,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,10 +53,15 @@ public class HourWeatherFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hour_weather, container, false);
+        return inflater.inflate(R.layout.fragment_hour_weather, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         mWeatherService = ApiUtils.getWeatherService();
         getData();
-        return view;
     }
 
     private void initRcvWeather() {
