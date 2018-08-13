@@ -31,7 +31,7 @@ public class Utils {
     }
 
     public static String getTempCelcius(Double temp) {
-        return String.format("%d ℃", (int)(temp - 273));
+        return String.format("%.2f ℃", temp - 273);
     }
 
     public static void getImageUrl(Context context, ImageView imageView, String idImage) {

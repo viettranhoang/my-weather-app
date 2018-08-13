@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.vit.myweatherapp.ui.feature.main.HourWeatherFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
+    String tabTitles[] = new String[] {"TODAY", "TOMORROW", "LATER"};
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -29,22 +30,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return tabTitles.length;
     }
 
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case 0:
-                return "TODAY";
-            case 1:
-                return "TOMORROW";
-            case 2:
-                return "LATER";
-            default:
-                return null;
-        }
-
+        return tabTitles[position];
     }
 }
