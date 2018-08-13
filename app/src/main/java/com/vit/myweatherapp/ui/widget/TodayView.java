@@ -1,8 +1,6 @@
 package com.vit.myweatherapp.ui.widget;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
@@ -12,6 +10,8 @@ import android.widget.TextView;
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.ui.util.Utils;
+
+import java.sql.Time;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,9 +54,8 @@ public class TodayView extends LinearLayout {
                     c.getWind().getSpeed(),
                     c.getMain().getPressure(),
                     c.getMain().getHumidity(),
-                    Utils.getHourDate(c.getSys().getSunrise()),
-                    Utils.getHourDate(c.getSys().getSunset()));
-
+                    Utils.getHhMmDate(c.getSys().getSunrise()),
+                    Utils.getHhMmDate(c.getSys().getSunset()));
 
             mTextTempToday.setText(Utils.getTempCelcius(c.getMain().getTemp()));
             mTextWeatherToday.setText(weather);

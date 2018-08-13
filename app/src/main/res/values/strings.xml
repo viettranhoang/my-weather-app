@@ -6,7 +6,11 @@
     <string name="message_title_search">Weather of City:</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
-    
+
+    <string name="date_today">TODAY</string>
+    <string name="date_tomorrow">TOMORROW</string>
+    <string name="date_later">LATER</string>
+
     <string name="celcius">℃</string>
     <string name="pressure">Pressure: </string>
     <string name="humidity">Humidity: </string>

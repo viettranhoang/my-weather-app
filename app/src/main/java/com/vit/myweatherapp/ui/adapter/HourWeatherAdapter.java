@@ -22,11 +22,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static android.text.Html.FROM_HTML_MODE_LEGACY;
-
 public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.HourWeatherViewHolder> {
 
-    private List<HourWeatherResponse.List> weatherList = new ArrayList<>();
+    private List<HourWeatherResponse.List> weatherList;
 
     @NonNull
     @Override
@@ -82,7 +80,7 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         void bindData(HourWeatherResponse.List list) {
             try {
                 String weather = itemView.getResources().getString(R.string.hour_weather,
-                        list.getDtTxt(),
+                        Utils.getDate(list.getDt()),
                         list.getWeather().get(0).getDescription(),
                         list.getWind().getSpeed(),
                         list.getMain().getPressure(),

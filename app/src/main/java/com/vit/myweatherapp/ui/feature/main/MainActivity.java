@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("My Weather App");
 
-        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
         viewPager.setAdapter(mViewPagerAdapter);
         layoutTab.setupWithViewPager(viewPager);
 

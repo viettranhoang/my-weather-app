@@ -9,18 +9,26 @@ import com.vit.myweatherapp.data.remote.ApiUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
     public static String getDate(Integer timestamp) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        return formatter.format(new Date(timestamp));
+        return formatter.format(timestamp * 1000L);
     }
 
-    public static String getHourDate(Integer timestamp) {
-        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
-        return formatter.format(new Date(timestamp));
+    public static String getHhMmDate(Integer timestamp) {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        return formatter.format(timestamp * 1000L);
     }
+
+    public static String getHhDate(Integer timestamp) {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH");
+        return formatter.format(timestamp * 1000L);
+    }
+
+
 
     public static String getCurrentDate() {
         return new SimpleDateFormat("HH:mm").format(new Date());
