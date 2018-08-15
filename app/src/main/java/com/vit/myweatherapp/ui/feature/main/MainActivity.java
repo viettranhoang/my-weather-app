@@ -76,6 +76,8 @@ public class MainActivity extends BaseActivity implements
 
     private FragmentManager mFragmentManager;
 
+    private OnLocationListener mGetLocationListener;
+
 
     // ---------------------------------------------------------------------------------------------
     // OVERIDE METHODS
@@ -154,12 +156,27 @@ public class MainActivity extends BaseActivity implements
                 addFragmentMap();
                 break;
             case R.id.menu_exit:
-                Toast.makeText(this, "Exit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.menu_exit), Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mFragmentManager.popBackStack();
+    }
+
+
+    // ---------------------------------------------------------------------------------------------
+    // PUBLIC METHODS
+    // ---------------------------------------------------------------------------------------------
+
+    public void setGetLocationListener(OnLocationListener listener) {
+        this.mGetLocationListener = listener;
     }
 
 
@@ -252,6 +269,7 @@ public class MainActivity extends BaseActivity implements
                             public void onSuccess(Location location) {
                                 if (location != null) {
                                     getCurrentWeatherFromApi(location);
+                                    mGetLocationListener.onLocationReceived(location);
                                 }
                             }
                         });
@@ -273,9 +291,11 @@ public class MainActivity extends BaseActivity implements
             dialogBuilder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     getDataSearchFromApi(inputSearch.getText().toString());
+                    mGetLocationListener.onInputSearchChanged(inputSearch.getText().toString());
                     dialog.cancel();
                 }
             });
+
             dialogBuilder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     dialog.cancel();
@@ -335,9 +355,11 @@ public class MainActivity extends BaseActivity implements
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        mFragmentManager.popBackStack();
+
+    public interface OnLocationListener {
+        void onLocationReceived(Location location);
+
+        void onInputSearchChanged(String city);
     }
+
 }

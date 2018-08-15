@@ -1,6 +1,7 @@
 package com.vit.myweatherapp.ui.feature.main;
 
 import android.annotation.SuppressLint;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
+import com.vit.myweatherapp.data.model.SearchHourWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 import com.vit.myweatherapp.data.remote.WeatherService;
 import com.vit.myweatherapp.ui.AppConfig;
@@ -28,7 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class HourWeatherFragment extends BaseFragment {
+public class HourWeatherFragment extends BaseFragment implements MainActivity.OnLocationListener {
 
     private WeatherService mWeatherService;
 
@@ -36,7 +39,10 @@ public class HourWeatherFragment extends BaseFragment {
 
     private int mDate;
 
-    private List<List<HourWeatherResponse.List>> mList;
+    private List<List<HourWeatherResponse.List>> mHourList;
+    private List<List<SearchHourWeatherResponse.List>> mSearchHourList;
+
+    private MainActivity mActivity;
 
     @BindView(R.id.list_weather)
     RecyclerView mRcvWeather;
@@ -61,7 +67,20 @@ public class HourWeatherFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         mWeatherService = ApiUtils.getWeatherService();
-        getData();
+
+        mActivity = (MainActivity)getActivity();
+        mActivity.setGetLocationListener(this);
+    }
+
+    @Override
+    public void onLocationReceived(Location location) {
+        getWeatherFromCurrentLocation(location);
+    }
+
+    @Override
+    public void onInputSearchChanged(String city) {
+        getWeatherFromCity(city);
+
     }
 
     private void initRcvWeather() {
@@ -71,8 +90,8 @@ public class HourWeatherFragment extends BaseFragment {
         mRcvWeather.setAdapter(mAdapter);
     }
 
-    private void getData() {
-        mWeatherService.getHourWeatherRespone(35, 139, AppConfig.API_KEY)
+    private void getWeatherFromCurrentLocation(Location location) {
+        mWeatherService.getHourWeatherRespone(location.getLatitude(), location.getLongitude(), AppConfig.API_KEY)
                 .enqueue(new Callback<HourWeatherResponse>() {
                     @Override
                     public void onResponse(Call<HourWeatherResponse> call, Response<HourWeatherResponse> response) {
@@ -88,13 +107,31 @@ public class HourWeatherFragment extends BaseFragment {
                 });
     }
 
+    private void getWeatherFromCity(String city) {
+        mWeatherService.getSearchHourWeatherRespone(city,  AppConfig.API_KEY)
+                .enqueue(new Callback<SearchHourWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<SearchHourWeatherResponse> call, Response<SearchHourWeatherResponse> response) {
+                        Timber.i("SearchHourAPI: " + response.body().getCity().getName());
+                        splitSearchDataByDate(response.body().getList());
+                        setAdapter();
+                        initRcvWeather();
+                    }
+
+                    @Override
+                    public void onFailure(Call<SearchHourWeatherResponse> call, Throwable t) {
+                        Timber.e("Error: SearchHourAPI ");
+                    }
+                });
+    }
+
     private void setAdapter() {
         if (mDate == R.string.date_today) {
-            mAdapter = new HourWeatherAdapter(mList.get(0));
+            mAdapter = new HourWeatherAdapter(mHourList.get(0));
         } else if (mDate == R.string.date_tomorrow) {
-            mAdapter = new HourWeatherAdapter(mList.get(1));
+            mAdapter = new HourWeatherAdapter(mHourList.get(1));
         } else {
-            mAdapter = new HourWeatherAdapter(mList.get(2));
+            mAdapter = new HourWeatherAdapter(mHourList.get(2));
         }
     }
 
@@ -104,17 +141,17 @@ public class HourWeatherFragment extends BaseFragment {
      */
     private void splitDataByDate(List<HourWeatherResponse.List> list) {
         try {
-            mList = new ArrayList<>();
+            mHourList = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                mList.add(new ArrayList<HourWeatherResponse.List>());
+                mHourList.add(new ArrayList<HourWeatherResponse.List>());
             }
 
             int  i = 0;
             for (HourWeatherResponse.List l : list) {
                 if (!Utils.getHhDate(l.getDt()).equals("22")) {
-                    mList.get(i).add(l);
+                    mHourList.get(i).add(l);
                 } else {
-                    mList.get(i).add(l);
+                    mHourList.get(i).add(l);
                     if (i < 2) i++;
 
                 }
@@ -123,6 +160,29 @@ public class HourWeatherFragment extends BaseFragment {
             Timber.e(e);
         }
     }
+
+    private void splitSearchDataByDate(List<SearchHourWeatherResponse.List> list) {
+        try {
+            mSearchHourList = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                mSearchHourList.add(new ArrayList<SearchHourWeatherResponse.List>());
+            }
+
+            int  i = 0;
+            for (SearchHourWeatherResponse.List l : list) {
+                if (!Utils.getHhDate(l.getDt()).equals("22")) {
+                    mSearchHourList.get(i).add(l);
+                } else {
+                    mSearchHourList.get(i).add(l);
+                    if (i < 2) i++;
+
+                }
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+    }
+
 
 
 }

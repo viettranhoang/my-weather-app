@@ -3,6 +3,7 @@ package com.vit.myweatherapp.data.remote;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.DailyWeatherResponse;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
+import com.vit.myweatherapp.data.model.SearchHourWeatherResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -35,6 +36,6 @@ public interface WeatherService {
                                                     @Query("appid") String appid);
 
     @GET("2.5/forecast?")
-    Call<HourWeatherResponse> getHourWeatherRespone(@Query("q") String q,
-                                                    @Query("appid") String appid);
+    Call<SearchHourWeatherResponse> getSearchHourWeatherRespone(@Query("q") String q,
+                                                                @Query("appid") String appid);
 }
