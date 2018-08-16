@@ -63,7 +63,6 @@ public class MainActivity extends BaseActivity implements
     TodayView mViewToday;
 
 
-
     // ---------------------------------------------------------------------------------------------
     // FIELDS
     // ---------------------------------------------------------------------------------------------
@@ -75,8 +74,11 @@ public class MainActivity extends BaseActivity implements
     private WeatherService mWeatherService;
 
     private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
 
-    private OnLocationListener mGetLocationListener;
+    private OnMainListener mMainListener;
+
+    private String mInputSearch = "";
 
 
     // ---------------------------------------------------------------------------------------------
@@ -96,8 +98,9 @@ public class MainActivity extends BaseActivity implements
             setupActionBar();
             initGoogleApi();
 
-            mFragmentManager = getSupportFragmentManager();
+
             mWeatherService = ApiUtils.getWeatherService();
+            ;
         } catch (Exception e) {
             Timber.e(e);
         }
@@ -148,12 +151,21 @@ public class MainActivity extends BaseActivity implements
             case R.id.menu_refresh:
                 getCurrentLocation();
                 mViewToday.setLastUpdate();
+                mInputSearch = "";
                 break;
             case R.id.menu_search:
                 showSearchDialog();
                 break;
             case R.id.menu_map:
-                addFragmentMap();
+                initMapFragment();
+                Timber.i("mInputSearch: " + mInputSearch);
+                if (mInputSearch.equals("")) {
+                    getCurrentLocation();
+                } else {
+                    getWeatherSearchFromApi(mInputSearch);
+                }
+
+
                 break;
             case R.id.menu_exit:
                 Toast.makeText(this, getString(R.string.menu_exit), Toast.LENGTH_SHORT).show();
@@ -175,8 +187,9 @@ public class MainActivity extends BaseActivity implements
     // PUBLIC METHODS
     // ---------------------------------------------------------------------------------------------
 
-    public void setGetLocationListener(OnLocationListener listener) {
-        this.mGetLocationListener = listener;
+
+    public void setMainListener(OnMainListener listener) {
+        this.mMainListener = listener;
     }
 
 
@@ -204,7 +217,7 @@ public class MainActivity extends BaseActivity implements
      *
      * @param location current position
      */
-    private void getCurrentWeatherFromApi(Location location) {
+    private void getCurrentWeatherFromApi(final Location location) {
         mWeatherService.getCurrentWeatherResponse(location.getLatitude(), location.getLongitude(), AppConfig.API_KEY)
                 .enqueue(new Callback<CurrentWeatherResponse>() {
                     @Override
@@ -213,6 +226,7 @@ public class MainActivity extends BaseActivity implements
                             Timber.i("CurrentWeather: " + response.body().getName());
                             mViewToday.setDataForView(getApplicationContext(), response.body());
                             setTitleActionBar(response.body());
+                            mMainListener.onCurrentWeather(location, response.body());
                         }
                     }
 
@@ -222,20 +236,7 @@ public class MainActivity extends BaseActivity implements
                     }
                 });
 
-        mWeatherService.getDailyWeatherRespone(location.getLatitude(), location.getLongitude(), 4, AppConfig.API_KEY)
-                .enqueue(new Callback<DailyWeatherResponse>() {
-                    @Override
-                    public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
-                        if (response.isSuccessful()) {
-                            Timber.i("DailyWeather: " + response.body().getCity().getName());
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Call<DailyWeatherResponse> call, Throwable t) {
-
-                    }
-                });
     }
 
     /**
@@ -269,7 +270,7 @@ public class MainActivity extends BaseActivity implements
                             public void onSuccess(Location location) {
                                 if (location != null) {
                                     getCurrentWeatherFromApi(location);
-                                    mGetLocationListener.onLocationReceived(location);
+                                    mMainListener.onLocationReceived(location);
                                 }
                             }
                         });
@@ -290,8 +291,9 @@ public class MainActivity extends BaseActivity implements
             dialogBuilder.setTitle(R.string.message_title_search);
             dialogBuilder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    getDataSearchFromApi(inputSearch.getText().toString());
-                    mGetLocationListener.onInputSearchChanged(inputSearch.getText().toString());
+                    mInputSearch = inputSearch.getText().toString();
+                    getWeatherSearchFromApi(inputSearch.getText().toString());
+                    mMainListener.onInputSearchChanged(inputSearch.getText().toString());
                     dialog.cancel();
                 }
             });
@@ -313,53 +315,43 @@ public class MainActivity extends BaseActivity implements
      *
      * @param keyword city's name
      */
-    private void getDataSearchFromApi(String keyword) {
-        try {
-            mWeatherService.getCurrentWeatherResponse(keyword, AppConfig.API_KEY)
-                    .enqueue(new Callback<CurrentWeatherResponse>() {
-                        @Override
-                        public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
-                            mViewToday.setDataForView(getApplicationContext(), response.body());
-                            setTitleActionBar(response.body());
-                        }
+    private void getWeatherSearchFromApi(String keyword) {
+        mWeatherService.getCurrentWeatherResponse(keyword, AppConfig.API_KEY)
+                .enqueue(new Callback<CurrentWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
+                        mViewToday.setDataForView(getApplicationContext(), response.body());
+                        setTitleActionBar(response.body());
 
-                        @Override
-                        public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
+                        mMainListener.onCurrentWeather(null, response.body());
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
 
-            mWeatherService.getDailyWeatherRespone(keyword, AppConfig.API_KEY)
-                    .enqueue(new Callback<DailyWeatherResponse>() {
-                        @Override
-                        public void onResponse(Call<DailyWeatherResponse> call, Response<DailyWeatherResponse> response) {
-                        }
-
-                        @Override
-                        public void onFailure(Call<DailyWeatherResponse> call, Throwable t) {
-
-                        }
-                    });
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    private void addFragmentMap() {
-        mFragmentManager.popBackStackImmediate();
-        FragmentTransaction ft = mFragmentManager.beginTransaction();
-        ft.add(R.id.layout_fragment, new MapFragment());
-        ft.addToBackStack(null);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        ft.commit();
+                    }
+                });
 
     }
 
+    private void initMapFragment() {
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.add(R.id.layout_fragment, new MapFragment());
+        mFragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        mFragmentTransaction.addToBackStack(null);
+        mFragmentTransaction.commit();
+    }
 
-    public interface OnLocationListener {
+
+    public interface OnMainListener {
         void onLocationReceived(Location location);
 
         void onInputSearchChanged(String city);
+
+        void onCurrentWeather(Location currentLocation, CurrentWeatherResponse currentWeather);
+
+
     }
 
 }

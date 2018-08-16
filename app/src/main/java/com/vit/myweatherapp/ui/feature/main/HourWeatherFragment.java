@@ -10,9 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.vit.myweatherapp.R;
+import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.data.model.SearchHourWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
@@ -31,7 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
-public class HourWeatherFragment extends BaseFragment implements MainActivity.OnLocationListener {
+public class HourWeatherFragment extends BaseFragment implements MainActivity.OnMainListener {
 
     private WeatherService mWeatherService;
 
@@ -41,8 +41,6 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
 
     private List<List<HourWeatherResponse.List>> mHourList;
     private List<List<SearchHourWeatherResponse.List>> mSearchHourList;
-
-    private MainActivity mActivity;
 
     @BindView(R.id.list_weather)
     RecyclerView mRcvWeather;
@@ -68,18 +66,24 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
 
         mWeatherService = ApiUtils.getWeatherService();
 
-        mActivity = (MainActivity)getActivity();
-        mActivity.setGetLocationListener(this);
+        ((MainActivity) getActivity()).setMainListener(this);
+
     }
 
     @Override
     public void onLocationReceived(Location location) {
+        Timber.i("HourFragment:" + location.toString());
         getWeatherFromCurrentLocation(location);
     }
 
     @Override
     public void onInputSearchChanged(String city) {
         getWeatherFromCity(city);
+
+    }
+
+    @Override
+    public void onCurrentWeather(Location currentLocation, CurrentWeatherResponse currentWeather) {
 
     }
 

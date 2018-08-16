@@ -45,4 +45,8 @@ public class Utils {
     public static void getImageUrl(Context context, ImageView imageView, String idImage) {
         Glide.with(context).load(ApiUtils.ICON_URL + idImage + ".png").into(imageView);
     }
+
+    public static String getImageUrl(String idImage) {
+        return ApiUtils.ICON_URL + idImage + ".png";
+    }
 }
