@@ -40,7 +40,7 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
     private int mDate;
 
     private List<List<HourWeatherResponse.List>> mHourList;
-    private List<List<SearchHourWeatherResponse.List>> mSearchHourList;
+    private List<List<SearchHourWeatherResponse.Weather_list>> mSearchHourList;
 
     @BindView(R.id.list_weather)
     RecyclerView mRcvWeather;
@@ -68,17 +68,19 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
 
         ((MainActivity) getActivity()).setMainListener(this);
 
+        getWeatherFromCity("london");
+
     }
 
     @Override
     public void onLocationReceived(Location location) {
         Timber.i("HourFragment:" + location.toString());
-        getWeatherFromCurrentLocation(location);
+//        getWeatherFromCurrentLocation(location);
     }
 
     @Override
     public void onInputSearchChanged(String city) {
-        getWeatherFromCity(city);
+//        getWeatherFromCity(city);
 
     }
 
@@ -117,14 +119,14 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
                     @Override
                     public void onResponse(Call<SearchHourWeatherResponse> call, Response<SearchHourWeatherResponse> response) {
                         Timber.i("SearchHourAPI: " + response.body().getCity().getName());
-                        splitSearchDataByDate(response.body().getList());
-                        setAdapter();
-                        initRcvWeather();
+//                        splitSearchDataByDate(response.body().getWeather_list());
+//                        setAdapter();
+//                        initRcvWeather();
                     }
 
                     @Override
                     public void onFailure(Call<SearchHourWeatherResponse> call, Throwable t) {
-                        Timber.e("Error: SearchHourAPI ");
+                        Timber.e("onFailure: SearchHourAPI " + t.toString());
                     }
                 });
     }
@@ -165,15 +167,15 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
         }
     }
 
-    private void splitSearchDataByDate(List<SearchHourWeatherResponse.List> list) {
+    private void splitSearchDataByDate(List<SearchHourWeatherResponse.Weather_list> list) {
         try {
             mSearchHourList = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                mSearchHourList.add(new ArrayList<SearchHourWeatherResponse.List>());
+                mSearchHourList.add(new ArrayList<SearchHourWeatherResponse.Weather_list>());
             }
 
             int  i = 0;
-            for (SearchHourWeatherResponse.List l : list) {
+            for (SearchHourWeatherResponse.Weather_list l : list) {
                 if (!Utils.getHhDate(l.getDt()).equals("22")) {
                     mSearchHourList.get(i).add(l);
                 } else {

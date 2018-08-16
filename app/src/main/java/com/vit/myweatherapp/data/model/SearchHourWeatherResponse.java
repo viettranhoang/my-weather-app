@@ -3,475 +3,306 @@ package com.vit.myweatherapp.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class SearchHourWeatherResponse {
 
-    @SerializedName("cod")
+
     @Expose
-    private String cod;
-    @SerializedName("message")
-    @Expose
-    private Double message;
-    @SerializedName("cnt")
-    @Expose
-    private Integer cnt;
-    @SerializedName("list")
-    @Expose
-    private java.util.List<SearchHourWeatherResponse.List> list = null;
     @SerializedName("city")
-    @Expose
     private City city;
-
-    public String getCod() {
-        return cod;
-    }
-
-    public void setCod(String cod) {
-        this.cod = cod;
-    }
-
-    public Double getMessage() {
-        return message;
-    }
-
-    public void setMessage(Double message) {
-        this.message = message;
-    }
-
-    public Integer getCnt() {
-        return cnt;
-    }
-
-    public void setCnt(Integer cnt) {
-        this.cnt = cnt;
-    }
-
-    public java.util.List<SearchHourWeatherResponse.List> getList() {
-        return list;
-    }
-
-    public void setList(java.util.List<SearchHourWeatherResponse.List> list) {
-        this.list = list;
-    }
+    @Expose
+    @SerializedName("list")
+    private List<Weather_list> weather_list;
+    @Expose
+    @SerializedName("cnt")
+    private int cnt;
+    @Expose
+    @SerializedName("message")
+    private double message;
+    @Expose
+    @SerializedName("cod")
+    private String cod;
 
     public City getCity() {
         return city;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public List<Weather_list> getWeather_list() {
+        return weather_list;
     }
 
+    public int getCnt() {
+        return cnt;
+    }
 
-    public class City {
+    public double getMessage() {
+        return message;
+    }
 
-        @SerializedName("id")
+    public String getCod() {
+        return cod;
+    }
+
+    public static class City {
         @Expose
-        private Integer id;
-        @SerializedName("name")
-        @Expose
-        private String name;
-        @SerializedName("coord")
-        @Expose
-        private Coord coord;
         @SerializedName("country")
-        @Expose
         private String country;
+        @Expose
+        @SerializedName("coord")
+        private Coord coord;
+        @Expose
+        @SerializedName("name")
+        private String name;
+        @Expose
+        @SerializedName("id")
+        private int id;
 
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
+        public String getCountry() {
+            return country;
         }
 
         public Coord getCoord() {
             return coord;
         }
 
-        public void setCoord(Coord coord) {
-            this.coord = coord;
+        public String getName() {
+            return name;
         }
 
-        public String getCountry() {
-            return country;
+        public int getId() {
+            return id;
         }
-
-        public void setCountry(String country) {
-            this.country = country;
-        }
-
     }
 
-    public class Clouds {
-
-        @SerializedName("all")
+    public static class Coord {
         @Expose
-        private Integer all;
-
-        public Integer getAll() {
-            return all;
-        }
-
-        public void setAll(Integer all) {
-            this.all = all;
-        }
-
-    }
-
-    public class Coord {
-
-        @SerializedName("lat")
-        @Expose
-        private Double lat;
         @SerializedName("lon")
+        private double lon;
         @Expose
-        private Double lon;
+        @SerializedName("lat")
+        private double lat;
 
-        public Double getLat() {
-            return lat;
-        }
-
-        public void setLat(Double lat) {
-            this.lat = lat;
-        }
-
-        public Double getLon() {
+        public double getLon() {
             return lon;
         }
 
-        public void setLon(Double lon) {
-            this.lon = lon;
+        public double getLat() {
+            return lat;
         }
-
     }
 
-    public class List {
-
-        @SerializedName("dt")
+    public static class Weather_list {
         @Expose
-        private Integer dt;
-        @SerializedName("main")
-        @Expose
-        private Main main;
-        @SerializedName("weather")
-        @Expose
-        private java.util.List<Weather> weather = null;
-        @SerializedName("clouds")
-        @Expose
-        private Clouds clouds;
-        @SerializedName("wind")
-        @Expose
-        private Wind wind;
-        @SerializedName("sys")
-        @Expose
-        private Sys sys;
         @SerializedName("dt_txt")
+        private String dt_txt;
         @Expose
-        private String dtTxt;
-        @SerializedName("rain")
+        @SerializedName("sys")
+        private Sys sys;
         @Expose
-        private Rain rain;
         @SerializedName("snow")
-        @Expose
         private Snow snow;
+        @Expose
+        @SerializedName("rain")
+        private Rain rain;
+        @Expose
+        @SerializedName("wind")
+        private Wind wind;
+        @Expose
+        @SerializedName("clouds")
+        private Clouds clouds;
+        @Expose
+        @SerializedName("weather")
+        private List<Weather> weather;
+        @Expose
+        @SerializedName("main")
+        private Main main;
+        @Expose
+        @SerializedName("dt")
+        private int dt;
 
-        public Integer getDt() {
-            return dt;
-        }
-
-        public void setDt(Integer dt) {
-            this.dt = dt;
-        }
-
-        public Main getMain() {
-            return main;
-        }
-
-        public void setMain(Main main) {
-            this.main = main;
-        }
-
-        public java.util.List<Weather> getWeather() {
-            return weather;
-        }
-
-        public void setWeather(java.util.List<Weather> weather) {
-            this.weather = weather;
-        }
-
-        public Clouds getClouds() {
-            return clouds;
-        }
-
-        public void setClouds(Clouds clouds) {
-            this.clouds = clouds;
-        }
-
-        public Wind getWind() {
-            return wind;
-        }
-
-        public void setWind(Wind wind) {
-            this.wind = wind;
+        public String getDt_txt() {
+            return dt_txt;
         }
 
         public Sys getSys() {
             return sys;
         }
 
-        public void setSys(Sys sys) {
-            this.sys = sys;
-        }
-
-        public String getDtTxt() {
-            return dtTxt;
-        }
-
-        public void setDtTxt(String dtTxt) {
-            this.dtTxt = dtTxt;
+        public Snow getSnow() {
+            return snow;
         }
 
         public Rain getRain() {
             return rain;
         }
 
-        public void setRain(Rain rain) {
-            this.rain = rain;
+        public Wind getWind() {
+            return wind;
         }
 
-        public Snow getSnow() {
-            return snow;
+        public Clouds getClouds() {
+            return clouds;
         }
 
-        public void setSnow(Snow snow) {
-            this.snow = snow;
+        public List<Weather> getWeather() {
+            return weather;
         }
 
+        public Main getMain() {
+            return main;
+        }
+
+        public int getDt() {
+            return dt;
+        }
     }
 
-    public class Main {
-
-        @SerializedName("temp")
+    public static class Sys {
         @Expose
-        private Double temp;
-        @SerializedName("temp_min")
-        @Expose
-        private Double tempMin;
-        @SerializedName("temp_max")
-        @Expose
-        private Double tempMax;
-        @SerializedName("pressure")
-        @Expose
-        private Double pressure;
-        @SerializedName("sea_level")
-        @Expose
-        private Double seaLevel;
-        @SerializedName("grnd_level")
-        @Expose
-        private Double grndLevel;
-        @SerializedName("humidity")
-        @Expose
-        private Integer humidity;
-        @SerializedName("temp_kf")
-        @Expose
-        private Integer tempKf;
-
-        public Double getTemp() {
-            return temp;
-        }
-
-        public void setTemp(Double temp) {
-            this.temp = temp;
-        }
-
-        public Double getTempMin() {
-            return tempMin;
-        }
-
-        public void setTempMin(Double tempMin) {
-            this.tempMin = tempMin;
-        }
-
-        public Double getTempMax() {
-            return tempMax;
-        }
-
-        public void setTempMax(Double tempMax) {
-            this.tempMax = tempMax;
-        }
-
-        public Double getPressure() {
-            return pressure;
-        }
-
-        public void setPressure(Double pressure) {
-            this.pressure = pressure;
-        }
-
-        public Double getSeaLevel() {
-            return seaLevel;
-        }
-
-        public void setSeaLevel(Double seaLevel) {
-            this.seaLevel = seaLevel;
-        }
-
-        public Double getGrndLevel() {
-            return grndLevel;
-        }
-
-        public void setGrndLevel(Double grndLevel) {
-            this.grndLevel = grndLevel;
-        }
-
-        public Integer getHumidity() {
-            return humidity;
-        }
-
-        public void setHumidity(Integer humidity) {
-            this.humidity = humidity;
-        }
-
-        public Integer getTempKf() {
-            return tempKf;
-        }
-
-        public void setTempKf(Integer tempKf) {
-            this.tempKf = tempKf;
-        }
-
-    }
-
-    public class Rain {
-
-        @SerializedName("3h")
-        @Expose
-        private Double _3h;
-
-        public Double get3h() {
-            return _3h;
-        }
-
-        public void set3h(Double _3h) {
-            this._3h = _3h;
-        }
-
-    }
-
-    public class Snow {
-
-        @SerializedName("3h")
-        @Expose
-        private Double _3h;
-
-        public Double get3h() {
-            return _3h;
-        }
-
-        public void set3h(Double _3h) {
-            this._3h = _3h;
-        }
-
-    }
-
-    public class Sys {
-
         @SerializedName("pod")
-        @Expose
         private String pod;
 
         public String getPod() {
             return pod;
         }
-
-        public void setPod(String pod) {
-            this.pod = pod;
-        }
-
     }
 
-    public class Weather {
+    public static class Snow {
+        @Expose
+        @SerializedName("3h")
+        private double three_h;
 
-        @SerializedName("id")
+        public double getThree_h() {
+            return three_h;
+        }
+    }
+
+    public static class Rain {
         @Expose
-        private Integer id;
-        @SerializedName("main")
+        @SerializedName("3h")
+        private double three_h;
+
+        public double getThree_h() {
+            return three_h;
+        }
+    }
+
+    public static class Wind {
         @Expose
-        private String main;
-        @SerializedName("description")
+        @SerializedName("deg")
+        private double deg;
         @Expose
-        private String description;
+        @SerializedName("speed")
+        private double speed;
+
+        public double getDeg() {
+            return deg;
+        }
+
+        public double getSpeed() {
+            return speed;
+        }
+    }
+
+    public static class Clouds {
+        @Expose
+        @SerializedName("all")
+        private int all;
+
+        public int getAll() {
+            return all;
+        }
+    }
+
+    public static class Weather {
+        @Expose
         @SerializedName("icon")
-        @Expose
         private String icon;
+        @Expose
+        @SerializedName("description")
+        private String description;
+        @Expose
+        @SerializedName("main")
+        private String main;
+        @Expose
+        @SerializedName("id")
+        private int id;
 
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getMain() {
-            return main;
-        }
-
-        public void setMain(String main) {
-            this.main = main;
+        public String getIcon() {
+            return icon;
         }
 
         public String getDescription() {
             return description;
         }
 
-        public void setDescription(String description) {
-            this.description = description;
+        public String getMain() {
+            return main;
         }
 
-        public String getIcon() {
-            return icon;
+        public int getId() {
+            return id;
         }
-
-        public void setIcon(String icon) {
-            this.icon = icon;
-        }
-
     }
 
-    public class Wind {
-
-        @SerializedName("speed")
+    public static class Main {
         @Expose
-        private Double speed;
-        @SerializedName("deg")
+        @SerializedName("temp_kf")
+        private double temp_kf;
         @Expose
-        private Double deg;
+        @SerializedName("humidity")
+        private int humidity;
+        @Expose
+        @SerializedName("grnd_level")
+        private double grnd_level;
+        @Expose
+        @SerializedName("sea_level")
+        private double sea_level;
+        @Expose
+        @SerializedName("pressure")
+        private double pressure;
+        @Expose
+        @SerializedName("temp_max")
+        private double temp_max;
+        @Expose
+        @SerializedName("temp_min")
+        private double temp_min;
+        @Expose
+        @SerializedName("temp")
+        private double temp;
 
-        public Double getSpeed() {
-            return speed;
+        public double getTemp_kf() {
+            return temp_kf;
         }
 
-        public void setSpeed(Double speed) {
-            this.speed = speed;
+        public int getHumidity() {
+            return humidity;
         }
 
-        public Double getDeg() {
-            return deg;
+        public double getGrnd_level() {
+            return grnd_level;
         }
 
-        public void setDeg(Double deg) {
-            this.deg = deg;
+        public double getSea_level() {
+            return sea_level;
         }
 
+        public double getPressure() {
+            return pressure;
+        }
+
+        public double getTemp_max() {
+            return temp_max;
+        }
+
+        public double getTemp_min() {
+            return temp_min;
+        }
+
+        public double getTemp() {
+            return temp;
+        }
     }
 }
+
