@@ -24,11 +24,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 2:
-                return new HourWeatherFragment(R.string.date_later);
+                return HourWeatherFragment.newInstant(R.string.date_later);
             case 0:
-                return new HourWeatherFragment(R.string.date_today);
+                return HourWeatherFragment.newInstant(R.string.date_today);
             case 1:
-                return new HourWeatherFragment(R.string.date_tomorrow);
+                return HourWeatherFragment.newInstant(R.string.date_tomorrow);
             default:
                 return null;
         }

@@ -204,6 +204,7 @@ public class MainActivity extends BaseActivity implements
 
         ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this);
         mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);
         mLayoutTab.setupWithViewPager(mViewPager);
 
     }

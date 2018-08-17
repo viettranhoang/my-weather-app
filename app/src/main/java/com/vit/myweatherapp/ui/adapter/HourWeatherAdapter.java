@@ -24,7 +24,7 @@ import timber.log.Timber;
 
 public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.HourWeatherViewHolder> {
 
-    private List<HourWeatherResponse.List> weatherList;
+    private List<HourWeatherResponse.Weather_list> weatherList = new ArrayList<>();
 
     @NonNull
     @Override
@@ -43,15 +43,19 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         return weatherList.size();
     }
 
-    public HourWeatherAdapter(List<HourWeatherResponse.List> weatherList) {
+    public HourWeatherAdapter(List<HourWeatherResponse.Weather_list> weatherList) {
         this.weatherList = weatherList;
+    }
+
+    public HourWeatherAdapter() {
+
     }
 
     /**
      * when data changed
      * @param data
      */
-    public void swapData(List<HourWeatherResponse.List> data) {
+    public void swapData(List<HourWeatherResponse.Weather_list> data) {
         this.weatherList.clear();
         this.weatherList.addAll(data);
         notifyDataSetChanged();
@@ -77,7 +81,7 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
 
         }
 
-        void bindData(HourWeatherResponse.List list) {
+        void bindData(HourWeatherResponse.Weather_list list) {
             try {
                 String weather = itemView.getResources().getString(R.string.hour_weather,
                         Utils.getDate(list.getDt()),

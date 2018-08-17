@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
-import com.vit.myweatherapp.data.model.SearchHourWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 import com.vit.myweatherapp.data.remote.WeatherService;
 import com.vit.myweatherapp.ui.AppConfig;
@@ -39,8 +38,7 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
 
     private int mDate;
 
-    private List<List<HourWeatherResponse.List>> mHourList;
-    private List<List<SearchHourWeatherResponse.Weather_list>> mSearchHourList;
+    private List<List<HourWeatherResponse.Weather_list>> mHourList;
 
     @BindView(R.id.list_weather)
     RecyclerView mRcvWeather;
@@ -49,9 +47,20 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
 
     }
 
-    @SuppressLint("ValidFragment")
-    public HourWeatherFragment(int date) {
-        mDate = date;
+    public static HourWeatherFragment newInstant(int date) {
+        HourWeatherFragment frm =new HourWeatherFragment();
+        Bundle argBundle =new Bundle();
+        argBundle.putInt("date", date);
+        frm.setArguments(argBundle);
+        return frm;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mDate = getArguments().getInt("date");
+
     }
 
     @Nullable
@@ -68,20 +77,29 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
 
         ((MainActivity) getActivity()).setMainListener(this);
 
-        getWeatherFromCity("london");
+//        getWeatherFromCurrentLocation(null);
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Timber.i(this.getClass().getSimpleName() + getString(mDate) + " start");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Timber.i(this.getClass().getSimpleName() + getString(mDate) + " stop");
     }
 
     @Override
     public void onLocationReceived(Location location) {
-        Timber.i("HourFragment:" + location.toString());
-//        getWeatherFromCurrentLocation(location);
+        getWeatherFromCurrentLocation(location);
     }
 
     @Override
     public void onInputSearchChanged(String city) {
-//        getWeatherFromCity(city);
-
+        getWeatherFromCity(city);
     }
 
     @Override
@@ -97,11 +115,11 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
     }
 
     private void getWeatherFromCurrentLocation(Location location) {
-        mWeatherService.getHourWeatherRespone(location.getLatitude(), location.getLongitude(), AppConfig.API_KEY)
+        mWeatherService.getHourWeatherRespone(35, 139, AppConfig.API_KEY)
                 .enqueue(new Callback<HourWeatherResponse>() {
                     @Override
                     public void onResponse(Call<HourWeatherResponse> call, Response<HourWeatherResponse> response) {
-                        splitDataByDate(response.body().getList());
+                        splitDataByDate(response.body().getWeather_list());
                         setAdapter();
                         initRcvWeather();
                     }
@@ -114,18 +132,18 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
     }
 
     private void getWeatherFromCity(String city) {
-        mWeatherService.getSearchHourWeatherRespone(city,  AppConfig.API_KEY)
-                .enqueue(new Callback<SearchHourWeatherResponse>() {
+        mWeatherService.getHourWeatherRespone(city,  AppConfig.API_KEY)
+                .enqueue(new Callback<HourWeatherResponse>() {
                     @Override
-                    public void onResponse(Call<SearchHourWeatherResponse> call, Response<SearchHourWeatherResponse> response) {
+                    public void onResponse(Call<HourWeatherResponse> call, Response<HourWeatherResponse> response) {
                         Timber.i("SearchHourAPI: " + response.body().getCity().getName());
-//                        splitSearchDataByDate(response.body().getWeather_list());
-//                        setAdapter();
-//                        initRcvWeather();
+                        splitDataByDate(response.body().getWeather_list());
+                        swapDataAdapter();
+
                     }
 
                     @Override
-                    public void onFailure(Call<SearchHourWeatherResponse> call, Throwable t) {
+                    public void onFailure(Call<HourWeatherResponse> call, Throwable t) {
                         Timber.e("onFailure: SearchHourAPI " + t.toString());
                     }
                 });
@@ -141,45 +159,37 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
         }
     }
 
+    private void swapDataAdapter() {
+        if (mAdapter == null) {
+            mAdapter = new HourWeatherAdapter();
+        }
+        if (mDate == R.string.date_today) {
+            mAdapter.swapData(mHourList.get(0));
+        } else if (mDate == R.string.date_tomorrow) {
+            mAdapter.swapData(mHourList.get(1));
+        } else {
+            mAdapter.swapData(mHourList.get(2));
+        }
+    }
+
     /**
      * split data for date: today, tomorrow, later
      * @param list from api
      */
-    private void splitDataByDate(List<HourWeatherResponse.List> list) {
+    private void splitDataByDate(List<HourWeatherResponse.Weather_list> list) {
         try {
             mHourList = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
-                mHourList.add(new ArrayList<HourWeatherResponse.List>());
+                mHourList.add(new ArrayList<HourWeatherResponse.Weather_list>());
             }
 
             int  i = 0;
-            for (HourWeatherResponse.List l : list) {
+            for (HourWeatherResponse.Weather_list l : list) {
+                Timber.i("aaa" + i);
                 if (!Utils.getHhDate(l.getDt()).equals("22")) {
                     mHourList.get(i).add(l);
                 } else {
                     mHourList.get(i).add(l);
-                    if (i < 2) i++;
-
-                }
-            }
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    private void splitSearchDataByDate(List<SearchHourWeatherResponse.Weather_list> list) {
-        try {
-            mSearchHourList = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                mSearchHourList.add(new ArrayList<SearchHourWeatherResponse.Weather_list>());
-            }
-
-            int  i = 0;
-            for (SearchHourWeatherResponse.Weather_list l : list) {
-                if (!Utils.getHhDate(l.getDt()).equals("22")) {
-                    mSearchHourList.get(i).add(l);
-                } else {
-                    mSearchHourList.get(i).add(l);
                     if (i < 2) i++;
 
                 }
