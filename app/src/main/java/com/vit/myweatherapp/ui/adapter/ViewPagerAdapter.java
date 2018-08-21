@@ -8,7 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.vit.myweatherapp.R;
-import com.vit.myweatherapp.ui.feature.main.HourWeatherFragment;
+import com.vit.myweatherapp.ui.feature.main.fragment.LaterFragment;
+import com.vit.myweatherapp.ui.feature.main.fragment.TodayFragment;
+import com.vit.myweatherapp.ui.feature.main.fragment.TomorrowFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     int tabTitles[] = new int[] {R.string.date_today, R.string.date_tomorrow, R.string.date_later};
@@ -23,12 +25,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 2:
-                return HourWeatherFragment.newInstant(R.string.date_later);
             case 0:
-                return HourWeatherFragment.newInstant(R.string.date_today);
+                return new TodayFragment();
             case 1:
-                return HourWeatherFragment.newInstant(R.string.date_tomorrow);
+                return new TomorrowFragment();
+            case 2:
+                return new LaterFragment();
             default:
                 return null;
         }

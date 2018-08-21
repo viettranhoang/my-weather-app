@@ -26,8 +26,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
+import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.ui.base.BaseFragment;
 import com.vit.myweatherapp.ui.util.Utils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import timber.log.Timber;
@@ -101,15 +104,6 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
 
 
     @Override
-    public void onLocationReceived(Location location) {
-    }
-
-    @Override
-    public void onInputSearchChanged(String city) {
-
-    }
-
-    @Override
     public void onCurrentWeather(Location currentLocation, CurrentWeatherResponse currentWeather) {
         String url = Utils.getImageUrl(currentWeather.getWeather().get(0).getIcon());
         String weather = currentWeather.getWeather().get(0).getDescription();
@@ -120,6 +114,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
             showImageWeather(currentWeather.getCoord().getLat(), currentWeather.getCoord().getLon(), url, weather);
         }
     }
+
 
     private void showImageWeather(Double lat, Double lon, String url, final String title) {
         final LatLng position = new LatLng(lat, lon);
@@ -142,7 +137,7 @@ public class MapFragment extends BaseFragment implements OnMapReadyCallback,
             @Override
             public void onLoadFailed(@Nullable Drawable errorDrawable) {
                 super.onLoadFailed(errorDrawable);
-                mGoogleMap.addMarker(new MarkerOptions().position(position).title("SOS"));
+                mGoogleMap.addMarker(new MarkerOptions().position(position));
                 showCameraToPosition(position);
             }
         });

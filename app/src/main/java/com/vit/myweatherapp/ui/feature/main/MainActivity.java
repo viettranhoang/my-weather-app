@@ -29,12 +29,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.DailyWeatherResponse;
+import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 import com.vit.myweatherapp.data.remote.WeatherService;
 import com.vit.myweatherapp.ui.adapter.ViewPagerAdapter;
 import com.vit.myweatherapp.ui.base.BaseActivity;
 import com.vit.myweatherapp.ui.AppConfig;
+import com.vit.myweatherapp.ui.util.Utils;
 import com.vit.myweatherapp.ui.widget.TodayView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import retrofit2.Call;
@@ -77,6 +82,9 @@ public class MainActivity extends BaseActivity implements
     private FragmentTransaction mFragmentTransaction;
 
     private OnMainListener mMainListener;
+    private OnTodayListener mTodayListener;
+    private OnTomorrowListener mTomorrowListener;
+    private OnLaterListener mLaterListener;
 
     private String mInputSearch = "";
 
@@ -192,6 +200,18 @@ public class MainActivity extends BaseActivity implements
         this.mMainListener = listener;
     }
 
+    public void setTodayListener(OnTodayListener listener) {
+        this.mTodayListener = listener;
+    }
+
+    public void setTomorrowListener(OnTomorrowListener listener) {
+        this.mTomorrowListener = listener;
+    }
+
+    public void setLaterListener(OnLaterListener listener) {
+        this.mLaterListener = listener;
+    }
+
 
     // ---------------------------------------------------------------------------------------------
     // PRIVATE METHODS
@@ -227,7 +247,10 @@ public class MainActivity extends BaseActivity implements
                             Timber.i("CurrentWeather: " + response.body().getName());
                             mViewToday.setDataForView(getApplicationContext(), response.body());
                             setTitleActionBar(response.body());
-                            mMainListener.onCurrentWeather(location, response.body());
+                            Timber.i("locationaaa " + location.toString());
+                            if (mMainListener != null) {
+                                mMainListener.onCurrentWeather(location, response.body());
+                            }
                         }
                     }
 
@@ -237,7 +260,97 @@ public class MainActivity extends BaseActivity implements
                     }
                 });
 
+        mWeatherService.getHourWeatherRespone(location.getLatitude(), location.getLongitude(), AppConfig.API_KEY)
+                .enqueue(new Callback<HourWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<HourWeatherResponse> call, Response<HourWeatherResponse> response) {
+                        List<List<HourWeatherResponse.Weather_list>> hourList = splitDataByDate(response.body().getWeather_list());
 
+                        mTodayListener.onPassTodayData(hourList.get(0));
+                        mTomorrowListener.onPassTomorrowData(hourList.get(1));
+                        mLaterListener.onPassLaterData(hourList.get(2));
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<HourWeatherResponse> call, Throwable t) {
+
+                    }
+                });
+    }
+
+    /**
+     * get city's weather from api
+     *
+     * @param keyword city's name
+     */
+    private void getWeatherSearchFromApi(String keyword) {
+        mWeatherService.getCurrentWeatherResponse(keyword, AppConfig.API_KEY)
+                .enqueue(new Callback<CurrentWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
+                        mViewToday.setDataForView(getApplicationContext(), response.body());
+                        setTitleActionBar(response.body());
+                        if (mMainListener != null) {
+                            mMainListener.onCurrentWeather(null, response.body());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
+
+                    }
+                });
+
+        mWeatherService.getHourWeatherRespone(keyword, AppConfig.API_KEY)
+                .enqueue(new Callback<HourWeatherResponse>() {
+                    @Override
+                    public void onResponse(Call<HourWeatherResponse> call, Response<HourWeatherResponse> response) {
+                        Timber.i("SearchHourAPI: " + response.body().getCity().getName());
+                        List<List<HourWeatherResponse.Weather_list>> hourList = splitDataByDate(response.body().getWeather_list());
+
+                        mTodayListener.onPassTodayData(hourList.get(0));
+                        mTomorrowListener.onPassTomorrowData(hourList.get(1));
+                        mLaterListener.onPassLaterData(hourList.get(2));
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<HourWeatherResponse> call, Throwable t) {
+                        Timber.e("onFailure: SearchHourAPI " + t.toString());
+                    }
+                });
+
+    }
+
+    /**
+     * split data for date: today, tomorrow, later
+     *
+     * @param list from api
+     */
+    private List<List<HourWeatherResponse.Weather_list>> splitDataByDate(List<HourWeatherResponse.Weather_list> list) {
+        List<List<HourWeatherResponse.Weather_list>> mHourList = new ArrayList<>();
+        try {
+            for (int i = 0; i < 3; i++) {
+                mHourList.add(new ArrayList<HourWeatherResponse.Weather_list>());
+            }
+
+            int i = 0;
+            for (HourWeatherResponse.Weather_list l : list) {
+                Timber.i("aaa" + i);
+                if (!Utils.getHhDate(l.getDt()).equals("22")) {
+                    mHourList.get(i).add(l);
+                } else {
+                    mHourList.get(i).add(l);
+                    if (i < 2) i++;
+
+                }
+            }
+        } catch (Exception e) {
+            Timber.e(e);
+        }
+        return mHourList;
     }
 
     /**
@@ -271,7 +384,6 @@ public class MainActivity extends BaseActivity implements
                             public void onSuccess(Location location) {
                                 if (location != null) {
                                     getCurrentWeatherFromApi(location);
-                                    mMainListener.onLocationReceived(location);
                                 }
                             }
                         });
@@ -294,7 +406,6 @@ public class MainActivity extends BaseActivity implements
                 public void onClick(DialogInterface dialog, int whichButton) {
                     mInputSearch = inputSearch.getText().toString();
                     getWeatherSearchFromApi(inputSearch.getText().toString());
-                    mMainListener.onInputSearchChanged(inputSearch.getText().toString());
                     dialog.cancel();
                 }
             });
@@ -311,29 +422,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    /**
-     * get city's weather from api
-     *
-     * @param keyword city's name
-     */
-    private void getWeatherSearchFromApi(String keyword) {
-        mWeatherService.getCurrentWeatherResponse(keyword, AppConfig.API_KEY)
-                .enqueue(new Callback<CurrentWeatherResponse>() {
-                    @Override
-                    public void onResponse(Call<CurrentWeatherResponse> call, Response<CurrentWeatherResponse> response) {
-                        mViewToday.setDataForView(getApplicationContext(), response.body());
-                        setTitleActionBar(response.body());
-
-                        mMainListener.onCurrentWeather(null, response.body());
-                    }
-
-                    @Override
-                    public void onFailure(Call<CurrentWeatherResponse> call, Throwable t) {
-
-                    }
-                });
-
-    }
 
     private void initMapFragment() {
         mFragmentManager = getSupportFragmentManager();
@@ -346,13 +434,19 @@ public class MainActivity extends BaseActivity implements
 
 
     public interface OnMainListener {
-        void onLocationReceived(Location location);
-
-        void onInputSearchChanged(String city);
-
         void onCurrentWeather(Location currentLocation, CurrentWeatherResponse currentWeather);
+    }
 
+    public interface OnTodayListener {
+        void onPassTodayData(List<HourWeatherResponse.Weather_list> hourList);
+    }
 
+    public interface OnTomorrowListener {
+        void onPassTomorrowData(List<HourWeatherResponse.Weather_list> hourList);
+    }
+
+    public interface OnLaterListener {
+        void onPassLaterData(List<HourWeatherResponse.Weather_list> hourList);
     }
 
 }

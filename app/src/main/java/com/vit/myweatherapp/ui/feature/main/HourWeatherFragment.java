@@ -1,6 +1,5 @@
 package com.vit.myweatherapp.ui.feature.main;
 
-import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -92,20 +91,13 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
         Timber.i(this.getClass().getSimpleName() + getString(mDate) + " stop");
     }
 
-    @Override
-    public void onLocationReceived(Location location) {
-        getWeatherFromCurrentLocation(location);
-    }
 
-    @Override
-    public void onInputSearchChanged(String city) {
-        getWeatherFromCity(city);
-    }
 
     @Override
     public void onCurrentWeather(Location currentLocation, CurrentWeatherResponse currentWeather) {
 
     }
+
 
     private void initRcvWeather() {
         mRcvWeather.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -198,7 +190,4 @@ public class HourWeatherFragment extends BaseFragment implements MainActivity.On
             Timber.e(e);
         }
     }
-
-
-
 }
