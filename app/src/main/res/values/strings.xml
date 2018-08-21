@@ -1,9 +1,35 @@
 <resources>
     <string name="app_name">My Weather App</string>
+    <string name="google_maps_key">AIzaSyAdqU_ayvuvcb6Mn6H2QIEPf0SHesnWK8o</string>
+
+    <!--menu-->
+    <string name="menu_map">Map</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_exit">Exit</string>
 
     <!--Main screen-->
     <string name="error_connect">Lỗi kết nối: </string>
     <string name="message_title_search">Weather of City:</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
+
+    <string name="date_today">TODAY</string>
+    <string name="date_tomorrow">TOMORROW</string>
+    <string name="date_later">LATER</string>
+
+    <string name="celcius">℃</string>
+    <string name="pressure">Pressure: </string>
+    <string name="humidity">Humidity: </string>
+    <string name="wind">Wind: </string>
+    <string name="sunride">Sunride: </string>
+    <string name="sunset">Sunset: </string>
+    <string name="current_weather">%1$s\nWind: %2$.2f m/s\nPressure: %3$.2f hPa\nHumidity: %4$d %%\nSunride: %5$s\nSunset: %6$s</string>
+    <string name="last_update">Last update:\n%1$s</string>
+
+    <string name="hour_weather"><![CDATA[<b>%1$s</b><br>
+                                    %2$s<br><br>
+                                    Wind: %3$.2f m/s<br>
+                                    Pressure: %4$.2f hPa<br>
+                                    Humidity: %5$d %%]]></string>
 </resources>

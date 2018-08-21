@@ -1,111 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".ui.feature.MainActivity">
+    tools:context=".ui.feature.main.MainActivity">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_search"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_search"
-        android:layout_margin="10dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:weightSum="10"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:toolbarId="@+id/toolbar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
+
+            <com.vit.myweatherapp.ui.widget.TodayView
+                android:id="@+id/view_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"/>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_main"
+                android:layout_width="match_parent"
+                app:layout_collapseMode="pin"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/layout_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <FrameLayout
+        android:id="@+id/layout_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    </FrameLayout>
 
-        <TextView
-            android:id="@+id/text_city"
-            android:text="Weather"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/text_time"
-            android:text="8/16/2016 7:16 AM"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:id="@+id/layout_today"
-            android:layout_below="@id/text_city"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_weight="8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/image_today"
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/text_today_main"
-                    android:text="Today : Clear"
-                    android:textSize="27sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/text_today_temp"
-                    android:text="16`C - 32`C"
-                    android:textSize="27sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_daily"
-            android:orientation="horizontal"
-            android:gravity="center_horizontal|bottom"
-            android:layout_weight="2"
-            android:weightSum="3"
-            android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.vit.myweatherapp.ui.widget.DailyView
-                android:id="@+id/view_daily_one"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <com.vit.myweatherapp.ui.widget.DailyView
-                android:id="@+id/view_daily_two"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <com.vit.myweatherapp.ui.widget.DailyView
-                android:id="@+id/view_daily_three"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
-
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_refresh"
+        android:icon="@drawable/ic_refresh"
+        app:showAsAction="always"
+        android:title="@string/menu_refresh" />
+
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_search"
+        app:showAsAction="always"
+        android:title="@string/menu_search" />
+
+    <item
+        android:id="@+id/menu_map"
+        android:icon="@drawable/ic_map"
+        app:showAsAction="always"
+        android:title="@string/menu_map"/>
+
+    <item
+        android:id="@+id/menu_exit"
+        android:checkable="false"
+        app:showAsAction="collapseActionView"
+        android:title="@string/menu_exit" />
+
+</menu>
