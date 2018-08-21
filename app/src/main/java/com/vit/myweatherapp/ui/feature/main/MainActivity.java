@@ -161,9 +161,11 @@ public class MainActivity extends BaseActivity implements
                 mViewToday.setLastUpdate();
                 mInputSearch = "";
                 break;
+
             case R.id.menu_search:
                 showSearchDialog();
                 break;
+
             case R.id.menu_map:
                 initMapFragment();
                 Timber.i("mInputSearch: " + mInputSearch);
@@ -172,12 +174,12 @@ public class MainActivity extends BaseActivity implements
                 } else {
                     getWeatherSearchFromApi(mInputSearch);
                 }
-
-
                 break;
+
             case R.id.menu_exit:
                 Toast.makeText(this, getString(R.string.menu_exit), Toast.LENGTH_SHORT).show();
                 break;
+
             default:
                 break;
         }
