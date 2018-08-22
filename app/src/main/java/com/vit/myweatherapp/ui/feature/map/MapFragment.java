@@ -1,4 +1,4 @@
-package com.vit.myweatherapp.ui.feature.main;
+package com.vit.myweatherapp.ui.feature.map;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -26,14 +26,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
-import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.ui.base.BaseFragment;
+import com.vit.myweatherapp.ui.feature.main.MainActivity;
 import com.vit.myweatherapp.ui.util.Utils;
 
-import java.util.List;
-
 import butterknife.BindView;
-import timber.log.Timber;
 
 public class MapFragment extends BaseFragment implements OnMapReadyCallback,
         MainActivity.OnMainListener {

@@ -4,12 +4,10 @@ import android.content.Context;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Utils {
 
@@ -32,10 +30,6 @@ public class Utils {
 
     public static String getCurrentDate() {
         return new SimpleDateFormat("HH:mm").format(new Date());
-    }
-
-    public static String getTempMinMax(Double tempMin, Double tempMax) {
-        return "" + (int)(tempMin - 273) + "℃ - " + (int)(tempMax - 273) + "℃";
     }
 
     public static String getTempCelcius(Double temp) {

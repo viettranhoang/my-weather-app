@@ -28,13 +28,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
-import com.vit.myweatherapp.data.model.DailyWeatherResponse;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.data.remote.ApiUtils;
 import com.vit.myweatherapp.data.remote.WeatherService;
 import com.vit.myweatherapp.ui.adapter.ViewPagerAdapter;
 import com.vit.myweatherapp.ui.base.BaseActivity;
 import com.vit.myweatherapp.ui.AppConfig;
+import com.vit.myweatherapp.ui.feature.map.MapFragment;
 import com.vit.myweatherapp.ui.util.Utils;
 import com.vit.myweatherapp.ui.widget.TodayView;
 
@@ -102,16 +102,13 @@ public class MainActivity extends BaseActivity implements
     public void initView() {
         super.initView();
 
-        try {
             setupActionBar();
             initGoogleApi();
 
 
             mWeatherService = ApiUtils.getWeatherService();
             ;
-        } catch (Exception e) {
-            Timber.e(e);
-        }
+
     }
 
 
@@ -340,7 +337,6 @@ public class MainActivity extends BaseActivity implements
 
             int i = 0;
             for (HourWeatherResponse.Weather_list l : list) {
-                Timber.i("aaa" + i);
                 if (!Utils.getHhDate(l.getDt()).equals("22")) {
                     mHourList.get(i).add(l);
                 } else {
@@ -355,9 +351,6 @@ public class MainActivity extends BaseActivity implements
         return mHourList;
     }
 
-    /**
-     * setup google service
-     */
     private void initGoogleApi() {
         try {
             mGoogleApiClient = new GoogleApiClient.Builder(this)

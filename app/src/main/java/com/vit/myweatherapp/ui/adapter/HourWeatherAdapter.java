@@ -1,6 +1,5 @@
 package com.vit.myweatherapp.ui.adapter;
 
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -51,15 +50,12 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
 
     }
 
-    /**
-     * when data changed
-     * @param data
-     */
-    public void swapData(List<HourWeatherResponse.Weather_list> data) {
+
+   /* public void swapData(List<HourWeatherResponse.Weather_list> data) {
         this.weatherList.clear();
         this.weatherList.addAll(data);
         notifyDataSetChanged();
-    }
+    }*/
 
     class HourWeatherViewHolder extends RecyclerView.ViewHolder {
 

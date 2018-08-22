@@ -11,7 +11,6 @@ import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.ui.util.Utils;
 
-import java.sql.Time;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

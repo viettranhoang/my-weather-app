@@ -1,7 +1,6 @@
 package com.vit.myweatherapp.ui.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

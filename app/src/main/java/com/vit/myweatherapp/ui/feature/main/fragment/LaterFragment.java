@@ -1,6 +1,5 @@
 package com.vit.myweatherapp.ui.feature.main.fragment;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vit.myweatherapp.R;
-import com.vit.myweatherapp.data.model.CurrentWeatherResponse;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
 import com.vit.myweatherapp.ui.adapter.HourWeatherAdapter;
 import com.vit.myweatherapp.ui.base.BaseFragment;
