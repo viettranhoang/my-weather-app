@@ -50,7 +50,7 @@ public class TomorrowFragment extends BaseFragment implements
     @Override
     public void onPassTomorrowData(List<HourWeatherResponse.Weather_list> hourList) {
         if (hourList != null) {
-            mAdapter = new HourWeatherAdapter(hourList, getContext());
+            mAdapter = new HourWeatherAdapter(hourList, getActivity());
             initRcvWeather();
         }
     }

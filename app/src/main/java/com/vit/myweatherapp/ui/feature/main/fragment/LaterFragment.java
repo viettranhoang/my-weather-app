@@ -49,7 +49,7 @@ public class LaterFragment extends BaseFragment implements MainActivity.OnLaterL
     @Override
     public void onPassLaterData(List<HourWeatherResponse.Weather_list> hourList) {
         if (hourList != null) {
-            mAdapter = new HourWeatherAdapter(hourList, getContext());
+            mAdapter = new HourWeatherAdapter(hourList, getActivity());
             initRcvWeather();
         }
     }

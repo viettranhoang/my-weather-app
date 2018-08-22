@@ -1,6 +1,8 @@
 package com.vit.myweatherapp.ui.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -14,8 +16,10 @@ import android.widget.Toast;
 
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
+import com.vit.myweatherapp.ui.feature.detail.DetailActivity;
 import com.vit.myweatherapp.ui.util.Utils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +31,7 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
 
     private List<HourWeatherResponse.Weather_list> weatherList = new ArrayList<>();
 
-    private Context context;
+    private Activity activity;
 
     @NonNull
     @Override
@@ -42,9 +46,10 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         holder.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
-                String info = String.format("%s - %s", weatherList.get(position).getWeather().get(0).getMain(),
-                                        weatherList.get(position).getWeather().get(0).getDescription());
-                Toast.makeText(context, info, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(activity, DetailActivity.class);
+//                String info = String.format("%s %s")
+                intent.putExtra("item", weatherList.get(position).toString());
+                activity.startActivity(intent);
             }
         });
     }
@@ -54,9 +59,9 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         return weatherList.size();
     }
 
-    public HourWeatherAdapter(List<HourWeatherResponse.Weather_list> weatherList, Context context) {
+    public HourWeatherAdapter(List<HourWeatherResponse.Weather_list> weatherList, Activity activity) {
         this.weatherList = weatherList;
-        this.context = context;
+        this.activity = activity;
     }
 
     public HourWeatherAdapter() {

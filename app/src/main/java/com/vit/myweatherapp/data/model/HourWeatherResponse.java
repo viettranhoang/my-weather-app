@@ -157,6 +157,19 @@ public class HourWeatherResponse {
         public int getDt() {
             return dt;
         }
+
+        @Override
+        public String toString() {
+            return "Weather_list{" +
+                    "dt_txt='" + dt_txt + '\'' +
+                    ", sys=" + sys.getPod() +
+                    ", wind=" + wind.getSpeed() +
+                    ", clouds=" + clouds.getAll() +
+                    ", weather=" + weather.get(0).getDescription() +
+                    ", main=" + main.getTemp() +
+                    ", dt=" + dt +
+                    '}';
+        }
     }
 
     public static class Sys {
