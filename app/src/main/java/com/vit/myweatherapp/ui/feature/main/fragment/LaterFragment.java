@@ -1,5 +1,6 @@
 package com.vit.myweatherapp.ui.feature.main.fragment;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,7 +49,7 @@ public class LaterFragment extends BaseFragment implements MainActivity.OnLaterL
     @Override
     public void onPassLaterData(List<HourWeatherResponse.Weather_list> hourList) {
         if (hourList != null) {
-            mAdapter = new HourWeatherAdapter(hourList);
+            mAdapter = new HourWeatherAdapter(hourList, getContext());
             initRcvWeather();
         }
     }

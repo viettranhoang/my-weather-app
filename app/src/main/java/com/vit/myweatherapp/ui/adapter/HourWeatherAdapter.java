@@ -1,5 +1,6 @@
 package com.vit.myweatherapp.ui.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vit.myweatherapp.R;
 import com.vit.myweatherapp.data.model.HourWeatherResponse;
@@ -25,6 +27,8 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
 
     private List<HourWeatherResponse.Weather_list> weatherList = new ArrayList<>();
 
+    private Context context;
+
     @NonNull
     @Override
     public HourWeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,6 +39,14 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
     @Override
     public void onBindViewHolder(@NonNull HourWeatherViewHolder holder, int position) {
         holder.bindData(weatherList.get(position));
+        holder.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                String info = String.format("%s - %s", weatherList.get(position).getWeather().get(0).getMain(),
+                                        weatherList.get(position).getWeather().get(0).getDescription());
+                Toast.makeText(context, info, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -42,8 +54,9 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         return weatherList.size();
     }
 
-    public HourWeatherAdapter(List<HourWeatherResponse.Weather_list> weatherList) {
+    public HourWeatherAdapter(List<HourWeatherResponse.Weather_list> weatherList, Context context) {
         this.weatherList = weatherList;
+        this.context = context;
     }
 
     public HourWeatherAdapter() {
@@ -57,7 +70,7 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         notifyDataSetChanged();
     }*/
 
-    class HourWeatherViewHolder extends RecyclerView.ViewHolder {
+    class HourWeatherViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @BindView(R.id.text_hour_weather)
         TextView mTextHourWeather;
@@ -68,13 +81,16 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
         @BindView(R.id.image_hour_weather)
         ImageView mImageHourWeather;
 
-        View view;
+        OnItemClickListener itemListener;
 
         public HourWeatherViewHolder(View itemView) {
             super(itemView);
-            view = itemView;
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
 
+        void setOnItemClickListener(OnItemClickListener itemListener) {
+            this.itemListener = itemListener;
         }
 
         void bindData(HourWeatherResponse.Weather_list list) {
@@ -94,5 +110,14 @@ public class HourWeatherAdapter extends RecyclerView.Adapter<HourWeatherAdapter.
                 Timber.e(e);
             }
         }
+
+        @Override
+        public void onClick(View v) {
+            itemListener.onClick(v, getAdapterPosition());
+        }
+    }
+
+    public interface OnItemClickListener {
+        void onClick(View view, int position);
     }
 }

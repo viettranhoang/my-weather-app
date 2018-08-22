@@ -19,7 +19,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class TodayFragment extends BaseFragment implements MainActivity.OnTodayListener{
+public class TodayFragment extends BaseFragment implements
+        MainActivity.OnTodayListener,
+        HourWeatherAdapter.OnItemClickListener{
 
     @BindView(R.id.list_weather_today)
     RecyclerView mRcvWeather;
@@ -48,8 +50,13 @@ public class TodayFragment extends BaseFragment implements MainActivity.OnTodayL
     @Override
     public void onPassTodayData(List<HourWeatherResponse.Weather_list> hourList) {
         if (hourList != null) {
-            mAdapter = new HourWeatherAdapter(hourList);
+            mAdapter = new HourWeatherAdapter(hourList, getContext());
             initRcvWeather();
         }
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+
     }
 }
